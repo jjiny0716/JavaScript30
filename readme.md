@@ -76,7 +76,7 @@ transform-origin의 초기값이 50%, 50%여서 요소의 중앙이 회전의 �
 크롬 개발자 도구의 Elements의 styles탭에서 css를 바꿔볼 수 있다.
 
 1. element.style에 css를 써서 속성 적용 가능.
-2. transition: cubic-bezier나 display: flex옆에 뜨는 아이콘을 클릭하면 나오는 gui로 속성값을 바꿔볼 수 있음.
+2. transition: cubic-bezier나 display: flex옆에 뜨는 아이콘을 클릭하면 나오는 gui로 속성값을 바꿔볼 수 있다.
 3. :hov를 클릭하면 임시로 pseudo 상태를 적용할 수 있다. (hover나 focus같은 것들)
 
 이것들 이외에도 훨씬 많다!!
@@ -127,7 +127,6 @@ tag {
 ```js
 // document.documentElement와 document.querySelector(":root")는 똑같은 값을 반환함.
 document.documentElement.style.setProperty(`--${name}`, value);
-
 ```
 
 이렇게 변경한 변수를 다시 써서 그 변수를 참조하고있는 곳들의 값을 다시 바꿔줘야하나 고민했지만, 자바스크립트로 CSS 변수를 변경하면, 그 변수를 참조하고있는 곳들에서 변화가 자동으로 반영된다.
@@ -152,3 +151,48 @@ const type = event.target.dataset.sizing || "";
 ### 왜이렇게 작동할까?
 
 something || something2에서, something이 true라면, 어차피 전체가 true이므로, something2는 고려하지 않게 된다. 그래서 위의 예제에서, event.target.dataset.sizing가 true라면, 뒤를 고려하지 않고, type = event.target.dataset.sizing이 되고, false인 경우 뒤쪽으로 넘어가 type = ""이 된다.
+
+# Day 04 - Array Cardio Day 1
+
+## Array.from(), destructuring assignment
+
+querySelectorAll()은 NodeList를 반환하기 때문에, map, filter같은 array method의 사용이 불가능하다. forEach는 사용가능하나, 다른 array method를 사용하고싶다면, Array.from()이나 destructuring assignment을 사용해보자.
+
+```js
+const array1 = [...someNodeList]; // destructuring assignment
+const array2 = Array.from(someNodeList);
+```
+
+이러한 방법은 HTMLCollection이나, Map이나 Set같은 iterable object, object등에도 사용 가능하다.
+
+## localeCompare
+
+사전순으로 단어를 정렬하고 싶을때, string의 localeCompare라는 메소드를 사용해보자.
+
+```js
+users.sort((a, b) => a.name.localeCompare(b.name));
+// 추가로, a.name < b.name 처럼 부등호를 이용할 수도 있지만, 굳이?
+```
+
+## console
+
+지금까지 console.log만 썼었는데, console.table이란 메소드를 발견했다. 데이터를 표로 출력해주는 메소드인데, 이걸 보고 다른 유용한 console메소드를 추가로 찾아봤다.
+
+### console.count
+
+```js
+console.count("counter"); // counter: 1
+console.count("counter"); // counter: 2
+console.count("counter"); // counter: 3
+```
+
+### console.time, console.timeEnd
+
+```js
+console.time("timer");
+// some code...
+console.timeEnd("timer"); // timer: 7.957ms
+```
+
+이외에도 많으니 찾아보면 좋을 것같다.
+
