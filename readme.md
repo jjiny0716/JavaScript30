@@ -196,3 +196,55 @@ console.timeEnd("timer"); // timer: 7.957ms
 
 이외에도 많으니 찾아보면 좋을 것같다.
 
+# Day 05 - Flex Panel Gallery
+
+## transitionend 이벤트
+
+transitionend 이벤트는 transition이 끝난 후 발생하는 이벤트이다.
+여러 transition 유형이 있는데 어떤 유형의 transition이 종료된 것인지 알고싶다면, event.propertyName을 써보자.
+
+```js
+panel.addEventListener("transitionend", toggleActive);
+function toggleActive(e) {
+  console.log(e.propertyName); // flex-grow가 출력됨.
+}
+```
+
+## toggle과, classList의 변화로 css 적용하기
+
+패널의 열고 닫음을 표현하기 위해 아래와 같은 코드를 작성했다.
+
+```js
+if (target.classList.contains("open")) {
+  target.style.flex = "1";
+  target.classList.remove("open");
+} else {
+  target.style.flex = "5";
+  target.classList.add("open");
+}
+```
+
+위와 같이 remove와 add를 번갈아가며 사용해야 하는 경우, toggle을 사용하면 더 간결하게 코드를 짤 수 있다.
+
+```js
+if (target.classList.contains("open")) target.style.flex = "1";
+else target.style.flex = "5";
+target.classList.toggle("open");
+```
+
+추가로, 위와 같이 자바스크립트로 css를 직접 변경하지 않고, css에 class유무에 따라 스타일을 적용하도록 작성해둔다면, class의 toggle만으로도 스타일을 바꿀 수 있다.
+
+```css
+.panel > *:first-child {
+  transform: translateY(-100%);
+}
+.panel.open-active > *:first-child {
+  transform: translateY(0);
+}
+```
+
+```js
+target.classList.toggle("open-active");
+```
+
+이렇게 작성한다면, open-active라는 class를 토글링하면, css도 같이 토글링 되는 것을 확인할 수 있다. 앞으로 class에 따라 스타일을 변화시켜야 한다면, 위와 같이 작성할 수 있지 않을까 고민해보자.
