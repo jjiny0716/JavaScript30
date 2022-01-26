@@ -1,22 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      const endpoint = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      const cities = [];
 
-</script>
-</body>
+      function loadCityData() {
+        fetch(endpoint)
+          .then((response) => response.json())
+          .then((json) => {
+            for (let city of json) cities.push(city);
+          });
+      }
+
+      function insertCommasToNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+      // 리팩토링 + cities의 추가적인 정보(이름 말고)를 활용해서 뭔가 더 해보자.
+      function handleKeyDown(e) {
+        if (!/[a-z]/.test(e.key) || !e.key == "Backspace") return;
+        let input = e.target.value + e.key;
+        if (e.key == "Backspace") input = e.target.value.substring(0, e.target.value.length - 1);
+
+        let resultHTML = "";
+        for (let city of cities) {
+          const fullName = `${city.city}, ${city.state}`;
+          if (fullName.toLowerCase().includes(input.toLowerCase())) {
+            const regex = new RegExp(input, "gi");
+            const resultCityText = fullName.replace(regex, `<span class="hl">${input}</span>`);
+
+            resultHTML += `<li><span>${resultCityText}</span><span class="population">${insertCommasToNumber(city.population)}</span></li>`;
+          }
+        }
+
+        const suggestions = document.querySelector(".suggestions");
+        suggestions.innerHTML = resultHTML;
+      }
+
+      loadCityData();
+
+      const searchInput = document.querySelector(".search");
+      searchInput.addEventListener("keydown", handleKeyDown);
+    </script>
+  </body>
 </html>

@@ -248,3 +248,26 @@ target.classList.toggle("open-active");
 ```
 
 이렇게 작성한다면, open-active라는 class를 토글링하면, css도 같이 토글링 되는 것을 확인할 수 있다. 앞으로 class에 따라 스타일을 변화시켜야 한다면, 위와 같이 작성할 수 있지 않을까 고민해보자.
+
+# Day 06 - Type Ahead
+
+## RegExp.replace()
+
+input에 입력한 텍스트에 매치되는 문자열에 span 태그를 추가하여 하이라이트 효과를 주기 위해서 다음과 같은 코드를 작성했다.
+
+```js
+// fullName에 존재하는 keyword를 span 태그로 감싸줌.
+const keywordPos = fullName.toLowerCase().indexOf(input.toLowerCase());
+const keyword = fullName.substring(keywordPos, keywordPos + input.length);
+const words = fullName.split(keyword);
+const resultCityText = words.join(`<span class="hl">${keyword}</span>`);
+```
+
+위와 같은 코드는 keyword가 fullName에 대문자와 소문자가 섞여있는 형태로 있을 때, 둘다 태그를 붙이지 않게된다. 그리고 무엇을 하는 코드인지 파악하기가 힘든 문제도 있다. 이럴때 RegExp.replace()를 사용하면, 간단하게 문제를 해결할 수 있다.
+
+```js
+const regex = new RegExp(input, "gi");
+const resultCityText = fullName.replace(regex, `<span class="hl">${input}</span>`);
+```
+
+코드가 2줄이 줄었는데, 읽기 쉬워졌고, 오류도 해결했다. 이처럼, 문자열을 가공하는 코드를 짜야할 때, 정규 표현식을 이용해보면 좋을 것 같다.
