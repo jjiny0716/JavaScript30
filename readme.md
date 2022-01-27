@@ -271,3 +271,28 @@ const resultCityText = fullName.replace(regex, `<span class="hl">${input}</span>
 ```
 
 코드가 2줄이 줄었는데, 읽기 쉬워졌고, 오류도 해결했다. 이처럼, 문자열을 가공하는 코드를 짜야할 때, 정규 표현식을 이용해보면 좋을 것 같다.
+
+# Day 07 - Array Cardio Day 2
+
+## 변수 이름과 함께 변수 출력하기
+```js
+console.log({variable})
+```
+
+## Array.prototype.find()
+
+find는 filter와 비슷하게 동작하나, 조건에 맞는 하나만을 리턴한다는 차이점이 있다. 
+
+```js
+const comment = comments.find(comment => comment.id === 823423);
+// 이렇게 하면, id가 823423인 Object 하나만 리턴된다.
+```
+
+## Array.prototype.findIndex() vs Array.prototype.indexOf()
+
+findIndex라는 메소드를 처음 봤을 때, inedxOf가 있는데 굳이 이걸 사용해야 할 이유를 느끼지 못했다. 그래서 추가적으로 찾아봤는데, indexOf는 number, string등이 들어가지만, findIndex는 메소드를 전달해서, 그 메소드가 true를 반환하는 요소를 반환해주는 것이다. 그래서 Array나 Object의 배열에서 특정 요소를 탐색할때 유용하게 사용할 수 있겠다. 
+
+```js
+comments.findIndex(comment => comment.id === 823423);
+// 이걸 indexOf로 구현하긴 힘들어보인다.. 
+```
