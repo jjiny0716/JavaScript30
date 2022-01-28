@@ -1,19 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>HTML5 Canvas</title>
-</head>
-<body>
-<canvas id="draw" width="800" height="800"></canvas>
-<script>
-</script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>HTML5 Canvas</title>
+  </head>
+  <body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+      const canvas = document.querySelector("#draw");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      let drawing = false;
+      let radius = 0;
+      let count = 0;
+      let hue = 0;
 
-<style>
-  html, body {
-    margin: 0;
-  }
-</style>
+      // circle을 그리지 말고, 예제처럼 lineJoin과 lineCap이 round로 설정된 선을 그리면, 선이 끊어지는 현상을 없앨 수 있었다.
+      function drawCircle(e) {
+        if (!drawing) return;
+        radius = Math.sin(count) * 20 + 22;
+        count += 0.008;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        hue += 0.2;
+        if (hue >= 360) {
+          hue = 0;
+        }
 
-</body>
+        const x = event.clientX;
+        const y = event.clientY;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+        ctx.fillStyle = "fill";
+        ctx.fill();
+      }
+
+      function startDrawing() {
+        // console.log("start!");
+        drawing = true;
+      }
+
+      function stopDrawing() {
+        // console.log("stop!");
+        drawing = false;
+      }
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", drawCircle);
+      canvas.addEventListener("mouseup", stopDrawing);
+    </script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+    </style>
+  </body>
 </html>

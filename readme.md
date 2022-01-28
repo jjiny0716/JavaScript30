@@ -275,24 +275,58 @@ const resultCityText = fullName.replace(regex, `<span class="hl">${input}</span>
 # Day 07 - Array Cardio Day 2
 
 ## 변수 이름과 함께 변수 출력하기
+
 ```js
-console.log({variable})
+console.log({ variable });
 ```
 
 ## Array.prototype.find()
 
-find는 filter와 비슷하게 동작하나, 조건에 맞는 하나만을 리턴한다는 차이점이 있다. 
+find는 filter와 비슷하게 동작하나, 조건에 맞는 하나만을 리턴한다는 차이점이 있다.
 
 ```js
-const comment = comments.find(comment => comment.id === 823423);
+const comment = comments.find((comment) => comment.id === 823423);
 // 이렇게 하면, id가 823423인 Object 하나만 리턴된다.
 ```
 
 ## Array.prototype.findIndex() vs Array.prototype.indexOf()
 
-findIndex라는 메소드를 처음 봤을 때, inedxOf가 있는데 굳이 이걸 사용해야 할 이유를 느끼지 못했다. 그래서 추가적으로 찾아봤는데, indexOf는 number, string등이 들어가지만, findIndex는 메소드를 전달해서, 그 메소드가 true를 반환하는 요소를 반환해주는 것이다. 그래서 Array나 Object의 배열에서 특정 요소를 탐색할때 유용하게 사용할 수 있겠다. 
+findIndex라는 메소드를 처음 봤을 때, inedxOf가 있는데 굳이 이걸 사용해야 할 이유를 느끼지 못했다. 그래서 추가적으로 찾아봤는데, indexOf는 number, string등이 들어가지만, findIndex는 메소드를 전달해서, 그 메소드가 true를 반환하는 요소를 반환해주는 것이다. 그래서 Array나 Object의 배열에서 특정 요소를 탐색할때 유용하게 사용할 수 있겠다.
 
 ```js
-comments.findIndex(comment => comment.id === 823423);
-// 이걸 indexOf로 구현하긴 힘들어보인다.. 
+comments.findIndex((comment) => comment.id === 823423);
+// 이걸 indexOf로 구현하긴 힘들어보인다..
 ```
+
+# Day 08 - Fun with HTML5 Canvas
+
+## 윈도우 크기
+
+canvas의 크기를 사용자의 윈도우 창 크기에 딱맞도록 동적으로 크기를 변경하고 싶었다. 그럴 때 윈도우의 크기를 가져올 수 있는 메소드가 있다.
+
+```js
+window.innerWidth(); // 브라우저 화면의 너비
+window.innerHeight(); // 브라우저 화면의 높이 (상단 탭 같은 것을 포함하지 않음)
+window.outerWidth(); // 브라우저 전체의 너비
+window.outerHeight(); // 브라우저 전체의 높이 (전체 다 포함)
+```
+
+## 마우스 좌표를 얻는 다양한 방법
+
+마우스를 이용해서 그림을 그리기 위해 clientX와 clientY를 이용해 마우스 좌표를 얻어냈다. 그런데 나중에 정답을 보니, offsetX와 offsetY를 이용해 마우스 좌표를 얻어오고 있었다. 무슨 차이인가 궁금해서 검색해봤더니, 마우스 좌표를 얻는 방법이 4가지나 있었다. 간단히 정리해봤다.
+
+### 1. clientX, clientY
+
+클라이언트 영역에서의 좌표를 반환한다. 브라우저 화면이 기준이 된다.
+
+### 2. offsetX, offsetY
+
+이벤트 대상의 좌표를 기준으로한 좌표를 반환한다. 만약 canvas가 화면 전체를 차지하는 것이 아니라, 사이즈가 고정되있고, 가운데로 정렬을 해놨다면, offsetX와 offsetY를 이용해서 그림을 그려야, canvas의 좌표를 기준으로 하기 때문에 올바르게 그림이 그려지게 된다.
+
+### 3. pageX, pageY
+
+문서를 기준으로한 좌표를 반환한다. 그래서 아래로 스크롤을 내릴수록 pageY가 제공하는 값이 계속해서 커진다고 보면 된다. (X도 마찬가지!)
+
+### 4. screenX, screenY
+
+모니터 화면을 기준으로한 좌표를 반환한다. 예를 들어 내가 1920 x 1080 해상도의 모니터를 쓰고있으니까, screenX의 값의 범위는 0~1919가 되겠지?
