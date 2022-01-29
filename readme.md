@@ -330,3 +330,19 @@ window.outerHeight(); // 브라우저 전체의 높이 (전체 다 포함)
 ### 4. screenX, screenY
 
 모니터 화면을 기준으로한 좌표를 반환한다. 예를 들어 내가 1920 x 1080 해상도의 모니터를 쓰고있으니까, screenX의 값의 범위는 0~1919가 되겠지?
+
+# Day 09 - 14 Must Know Dev Tools Tricks
+
+## 개발자 도구로 HTML 수정하기
+개발자 도구의 Elements 탭에서, HTML 요소에 오른쪽 클릭을 하면, 유용한 메뉴들이 나온다.   
+1. 속성의 추가, 삭제
+2. 텍스트 수정
+3. HTML 통째로 수정
+4. element의 복사, 삭제
+5. 가리기
+5. 상태 강제(hover같은 것들)
+6. 해당 element를 조작하는 javascript 코드에 breakpoint 잡기
+   
+이외에도 많은 기능들이 있으니 한번 클릭해보자.
+
+
