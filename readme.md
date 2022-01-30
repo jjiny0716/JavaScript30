@@ -334,15 +334,44 @@ window.outerHeight(); // 브라우저 전체의 높이 (전체 다 포함)
 # Day 09 - 14 Must Know Dev Tools Tricks
 
 ## 개발자 도구로 HTML 수정하기
-개발자 도구의 Elements 탭에서, HTML 요소에 오른쪽 클릭을 하면, 유용한 메뉴들이 나온다.   
+
+개발자 도구의 Elements 탭에서, HTML 요소에 오른쪽 클릭을 하면, 유용한 메뉴들이 나온다.
+
 1. 속성의 추가, 삭제
 2. 텍스트 수정
 3. HTML 통째로 수정
 4. element의 복사, 삭제
 5. 가리기
-5. 상태 강제(hover같은 것들)
-6. 해당 element를 조작하는 javascript 코드에 breakpoint 잡기
-   
+6. 상태 강제(hover같은 것들)
+7. 해당 element를 조작하는 javascript 코드에 breakpoint 잡기
+
 이외에도 많은 기능들이 있으니 한번 클릭해보자.
 
+# Day 10 - Hold Shift and Check Checkboxes
+
+## 체크박스 상태 읽기, 쓰기
+checkbox.checked를 이용하면, checkbox가 체크되어있는지 확인할 수 있고(boolean임), 상태를 바꿔줄 수도 있다.
+
+## MouseEvent.shiftKey
+
+체크박스를 클릭할 때, shift 키가 눌려진 상태인지 확인하기 위해, 아래와 같은 코드를 작성했다.
+
+```js
+let isShiftPressed = false;
+addEventListener("keydown", (e) => {
+  if (e.key === "Shift") isShiftPressed = true;
+});
+addEventListener("keyup", (e) => {
+  if (e.key === "Shift") isShiftPressed = false;
+});
+```
+
+shift 키를 누르고 뗄 때마다, isShiftPressed의 값을 바꾸는 식으로 작성했다. 하지만 체크박스를 클릭할 때 받는 이벤트엔 shiftKey라는 속성이 있다.
+
+```js
+if (e.shiftKey) console.log("Shift key is pressed!!"); 
+//shift key가 눌린 상태면 true여서 문구가 출력된다.
+```
+
+이외에도 altKey, ctrlKey가 있으니, 이를 활용하면 더이상 복잡하게 코드를 작성할 필요가 없겠다.
 
