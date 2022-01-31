@@ -350,6 +350,7 @@ window.outerHeight(); // 브라우저 전체의 높이 (전체 다 포함)
 # Day 10 - Hold Shift and Check Checkboxes
 
 ## 체크박스 상태 읽기, 쓰기
+
 checkbox.checked를 이용하면, checkbox가 체크되어있는지 확인할 수 있고(boolean임), 상태를 바꿔줄 수도 있다.
 
 ## MouseEvent.shiftKey
@@ -369,9 +370,25 @@ addEventListener("keyup", (e) => {
 shift 키를 누르고 뗄 때마다, isShiftPressed의 값을 바꾸는 식으로 작성했다. 하지만 체크박스를 클릭할 때 받는 이벤트엔 shiftKey라는 속성이 있다.
 
 ```js
-if (e.shiftKey) console.log("Shift key is pressed!!"); 
+if (e.shiftKey) console.log("Shift key is pressed!!");
 //shift key가 눌린 상태면 true여서 문구가 출력된다.
 ```
 
 이외에도 altKey, ctrlKey가 있으니, 이를 활용하면 더이상 복잡하게 코드를 작성할 필요가 없겠다.
 
+# Day 11 - Custom Video Player
+
+## 특정 attribute를 가진 element 가져오기
+
+id나 class 말고 특정 attribute를 기준으로 element를 가져올 수 있다.
+
+```js
+// data-skip attribute의 존재유무에 따라서
+const skipBtns = document.querySelectorAll("[data-skip]");
+// data-skip attribute의 존재유무 + 값에 따라서
+const skipBtns = document.querySelectorAll("[data-skip='25']");
+```
+
+## callback function속 this
+
+##
