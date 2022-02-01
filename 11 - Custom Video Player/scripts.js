@@ -35,6 +35,7 @@ function changeCurrentTime(e) {
   videoPlayer.currentTime = (videoPlayer.duration * percent) / 100;
   // changeProgressBar();
 }
+addEventListener("click", e => console.log(progress.getBoundingClientRect()));
 
 videoPlayer.addEventListener("timeupdate", changeProgressBar);
 videoPlayer.addEventListener("click", toggleVideo);

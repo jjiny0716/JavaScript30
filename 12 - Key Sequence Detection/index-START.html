@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Key Detection</title>
-  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
-</head>
-<body>
-<script>
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+  </head>
+  <body>
+    <script>
+      const sequence = [];
+      const answer = "jjiny";
+
+      function updateSequence(key) {
+        sequence.push(key);
+        if (sequence.length > answer.length) {
+          sequence.shift();
+        }
+      }
+
+      function checkAnswer() {
+        if (sequence.join("").localeCompare(answer) === 0) {
+          console.log("정답!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@#");
+        }
+      }
+
+      function handleKeyDown(e) {
+        console.log(e.key);
+        updateSequence(e.key);
+        console.log(sequence);
+        checkAnswer();
+      }
+      addEventListener("keydown", handleKeyDown);
+    </script>
+  </body>
 </html>

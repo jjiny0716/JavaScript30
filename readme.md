@@ -389,6 +389,70 @@ const skipBtns = document.querySelectorAll("[data-skip]");
 const skipBtns = document.querySelectorAll("[data-skip='25']");
 ```
 
-## callback function속 this
+## 요소의 크기를 가져오는 다양한 방법
 
-##
+element의 너비를 얻기 위해 다음과 같은 코드를 작성했다.
+
+```js
+progress.width;
+```
+
+하지만 이는 잘못된 방법이다! width는 css에서 쓰는 속성이다. 그러므로 내가 의도한 코드는...
+
+```js
+progress.style.width;
+```
+
+하지만, 이렇게 하면 css에 정의된 width속성의 값을 얻을 뿐이라서, 원하는 값을 얻지 못할 가능성이 크다. 실제로 문서에 어떠한 크기로 나타나는지를 확인하고 싶다면, 사용할 수 있는 다양한 방법이 있다.
+
+```js
+div.offsetWidth; // margin 제외, border와 padding을 포함한 width를 제공
+div.clientWidth; // border와 padding을 제외한 width를 제공
+div.scrollWidth; // 스크롤 영역일때, 스크롤로 가려진 부분까지 포함한 width를 제공
+```
+
+추가로, getBoundingClientRect라는 메소드를 이용하면, DOMRect객체를 받아올 수 있는데, 여기서 제공하는 width와 height는 transform: translate같은 속성에 영향을 받은 후 최종적으로 렌더링된 element의 크기를 제공해준다.
+
+```js
+const rect = progress.getBoundingClientRect();
+console.log(rect);
+// {
+//     "x": 130,
+//     "y": 576.7999877929688,
+//     "width": 640,
+//     "height": 5,
+//     "top": 576.7999877929688,
+//     "right": 770,
+//     "bottom": 581.7999877929688,
+//     "left": 130
+// }
+```
+
+## event callback function속 this
+
+코드를 다 작성하고 정답코드를 확인했는데, 내가 e.target이라고 쓴 것과 달리 this를 사용해서 타깃의 속성에 접근하는 코드를 확인했다. 그걸 보고 내 코드도 this로 바꿔봤는데, 동일하게 동작하는 것을 확인했다. 검색해보니, event callback function에서 this는 currentTarget과 동일한 대상을 가리킨다는 것을 확인했다. 그런데, target과 currentTarget은 뭐가 다른걸까?
+
+## target vs currentTarget
+
+currentTarget은 이벤트 핸들러가 부착된 것을 가리킨다. 부모요소에 이벤트위임을 이용한 코드를 작성해 전달했다면, 부모가 currentTarget, 이벤트를 위임받는 자식이 target이 된다. 만약 event callback function안에서 this를 사용하려면, 이를 헷갈리지 않도록 조심해야겠다.
+
+# Day 12 - Key Sequence Detection
+
+## splice의 매개변수
+
+강의를 보던중 이런 코드를 발견했다.
+
+```js
+pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+// splice(start, end);
+```
+
+무슨일을 하는 코드인지 이해하기 어려워서, splice의 매개변수에 대해 간단히 알아보고 위 코드가 어떻게 동작하게 되는지 이해했다.
+
+secretCode.length = 6이라고 가정
+
+1. start의 절댓값이 문자열의 길이와 같거나 크면 무시됨. 즉, pressed.length가 7이상일때 작동함.
+
+2. start가 음수면, 배열 끝에서부터의 길이를 나타냄. pressed.length = 7인데 start가 7이라면, pressed의 시작부분이 된다.
+
+3. pressed.length - secretCode.length가 1이 되므로, 뒤쪽의 secretCode.length만큼의 부분을 제외하고 전부 제거하는 코드가 된다.
