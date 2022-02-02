@@ -456,3 +456,42 @@ secretCode.length = 6이라고 가정
 2. start가 음수면, 배열 끝에서부터의 길이를 나타냄. pressed.length = 7인데 start가 7이라면, pressed의 시작부분이 된다.
 
 3. pressed.length - secretCode.length가 1이 되므로, 뒤쪽의 secretCode.length만큼의 부분을 제외하고 전부 제거하는 코드가 된다.
+
+# Day 13 - Slide in on Scroll
+
+## 디바운스
+
+프로젝트를 시작하려는데, debounce라는 함수가 기본적으로 제공되어있었다. 무슨일을 하는 함수인지 파악하기가 어려워서, 인터넷에 검색해봤다. 디바운싱: 연이어 호출되는 함수들 중 마지막 함수(또는 제일 처음)만 호출하도록 하는 것이라고 한다. 이 정의를 토대로 제공된 debounce함수를 분석해봤다.
+
+```js
+// 함수, 연이어 호출로 감지하기 위한 시간 간격, 연이어 호출되는 함수들중 처음을 호출할지 마지막을 호출할지를 인자로 받는다.
+function debounce(func, wait = 20, immediate = true) {
+  var timeout; // 클로저를 이용해 setTimeout의 id를 계속해서 이용할 수 있게함.
+  return function () {
+    // 내가 전달한 함수대신 이 함수가 호출될 것임.
+    var context = this,
+      args = arguments; // 함수가 호출된 곳의 this와 받은 인자들을 저장함.
+    var later = function () {
+      // 시간간격(20ms)가 지날동안 함수가 다시 호출되지 않았다면 마지막에 호출되는 함수.
+      timeout = null; // timeout을 clear하고, immediate를 false로 했다면, 마지막에 내가 전달했던 함수가 실행됨.
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout; // immediate가 true라는 것은 함수를 즉시 호출하도록 인자를 전달한 것이고, timeout이 false라는 것은 연이어 호출되고 있지 않음을 나타낸다.
+    clearTimeout(timeout); // timeout을 clear하고, 새로 건다
+    timeout = setTimeout(later, wait); // 이것으로, 내가 전달한 wait만큼의 시간간격안에 이 함수가 다시 실행되면, later가 실행되지 않고, timeout이 다시 걸린다.
+    if (callNow) func.apply(context, args); // immediate가 true이고, 연이어 호출되고있지 않은 상황이었다면 내가 전달한 함수를 실행.
+  };
+}
+```
+
+이해하기 어려웠지만, 한줄씩 잘 분석해보니 무슨일을 하는 함수인지 이해할 수 있었다.  
+이제 window 객체에 scroll 이벤트리스너를 등록할 때, debounce를 이용해 등록해봤다.
+
+```js
+window.addEventListener("scroll", debounce(toggleSlide, 20, false));
+// 스크롤이 끝난 후에 함수를 실행시키기위해 3번째 인자를 false로 전달함.
+```
+
+console.count()를 이용해 페이지 끝까지 스크롤했을때, 이벤트가 불리는 횟수를 세어보았더니, debounce를 사용하지 않았을 때는 443회, debounce를 사용했을 때는 11회로 급격하게 감소했고, 거의 동일한 사용자 경험을 제공할 수 있었다. 비슷한 역할을 하는 프로그래밍 기법중엔 쓰로틀링도 있다. 쓰로틀링은 함수가 호출된 후 일정시간동안 다시 호출되지 않도록 하는 기법이다. 이 내용들을 이해하는데 [제로초님의 블로그](https://www.zerocho.com/)의 두 포스트가 큰 도움이 되었다.  
+https://www.zerocho.com/category/JavaScript/post/59a8e9cb15ac0000182794fa
+https://www.zerocho.com/category/JavaScript/post/57433645a48729787807c3fd
