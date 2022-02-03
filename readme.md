@@ -495,3 +495,48 @@ window.addEventListener("scroll", debounce(toggleSlide, 20, false));
 console.count()를 이용해 페이지 끝까지 스크롤했을때, 이벤트가 불리는 횟수를 세어보았더니, debounce를 사용하지 않았을 때는 443회, debounce를 사용했을 때는 11회로 급격하게 감소했고, 거의 동일한 사용자 경험을 제공할 수 있었다. 비슷한 역할을 하는 프로그래밍 기법중엔 쓰로틀링도 있다. 쓰로틀링은 함수가 호출된 후 일정시간동안 다시 호출되지 않도록 하는 기법이다. 이 내용들을 이해하는데 [제로초님의 블로그](https://www.zerocho.com/)의 두 포스트가 큰 도움이 되었다.  
 https://www.zerocho.com/category/JavaScript/post/59a8e9cb15ac0000182794fa
 https://www.zerocho.com/category/JavaScript/post/57433645a48729787807c3fd
+
+# Day 14 - JavaScript References VS Copying
+
+## 배열 복사
+
+배열을 복사하는 다양한 방법이 있다. 어느 방법이 성능면에서 제일 나을지 궁금해 측정해봤다.
+
+```js
+const newArr1 = arr.slice(0);
+const newArr2 = [].concat(arr);
+const newArr3 = [];
+for (let i = 0; i < 100000000; i++) newArr3.push(arr[i]);
+const newArr4 = [...arr];
+const newArr5 = Array.from(arr);
+// slice: 349.708ms
+// concat: 294.534ms
+// for loop: 1.282s
+// spread: 277.369ms
+// Array.from: 279.875ms
+```
+
+for loop는 아마도 push를 써서 느린 것 같다. 큰 차이는 없어보이니 난 spread 연산자를 사용할 것 같다.
+
+## object 복사
+
+아래는 object를 복사하는 대표적인 2개의 방법이다.
+
+```js
+const person2 = { ...person, age = 11 }; // 두 방법모두 뒤에 추가적인 property를 붙일 수 있다.
+const person3 = Object.assign({}, person, {age = 11});
+```
+
+## 깊은 복사?
+
+지금까지 소개했던 방법들은 전부 얕은 복사를 제공한다. 그말인 즉슨 배열이나 object의 1차적인 데이터까지만 복사해주기 때문에, 만약에 reference가 한번 더 있다면(object 안에 object같은 것), 그 reference가 가리키는 안쪽의 데이터는 완전히 복사되지 못하고 원본과 공유하게 된다는 이야기이다. 데이터 자체를 통째로 복사하여, 완전히 독립된 메모리를 갖도록 깊은복사를 하려면 어떻게 해야할까?
+
+### JSON 객체 이용하기
+
+```js
+const copied = JSON.parse(JSON.stringify(obj));
+```
+
+이 방법은 사용하기 간편하나, 속도가 아주 느리고, JSON에서 날려버리는 undefined와 function까지 복사하는 것은 불가능하다.
+
+위의 단점들이 신경쓰인다면, 직접 구현하거나 lodash 라이브러리의 cloneDeep을 사용해야 겠다.
