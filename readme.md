@@ -540,3 +540,73 @@ const copied = JSON.parse(JSON.stringify(obj));
 이 방법은 사용하기 간편하나, 속도가 아주 느리고, JSON에서 날려버리는 undefined와 function까지 복사하는 것은 불가능하다.
 
 위의 단점들이 신경쓰인다면, 직접 구현하거나 lodash 라이브러리의 cloneDeep을 사용해야 겠다.
+
+# Day 15 - LocalStorage
+
+## localStorage
+
+localStorage는 브라우저에 키-값 쌍을 저장할 수 있게 해주는 객체이다. 비슷한 객체로 sessionStorage가 있지만, 브라우저를 다시 실행하면 사라지기 때문에, localStorage가 자주 이용된다고 한다. localStorage는 페이지를 새로 고침하거나, 브라우저를 다시 실행해도 데이터가 사라지지 않고 유지된다. localStorage를 사용하는 방법을 알아보자.
+
+### 문법
+
+```js
+// 데이터를 저장하는 3가지 방법
+localStorage.someKey = "some value";
+localStorage["someKey"] = "some value";
+localStorage.setItem("someKey", "some value");
+
+// 데이터를 얻는 3가지 방법
+let value = localStorage.someKey;
+let value = localStorage["someKey"];
+let value = localStorage.getItem("someKey");
+
+// 아이템 삭제
+localStorage.removeItem(key);
+// 아이템 전체 삭제
+localStorage.clear();
+// 순회하는 방법
+localStorage.key(index); // index에 해당하는 key를 받아옴.
+localStorage.length; // 저장된 데이터의 길이를 받아옴.
+```
+
+### Object를 저장하는 법
+
+localStorage의 value는 문자열이기 때문에, Object를 아무런 처리없이 localStorage에 저장하면, 자동으로 toString()으로 변환된 문자열이 들어가기 때문에, Object에 있었던 모든 정보가 제거된 채로 저장된다. 이를 막기 위해 JSON.stringify를 이용해 문자열로 Object를 변환해준 후에 localStorage에 저장하도록 하자.
+
+```js
+localStorage[i] = JSON.stringify(item);
+```
+
+## javascript에서 form 요소 사용하기
+
+### submit event, preventDefault
+
+submit event는 form 요소에서 사용자가 enter를 누르거나 submit역할을 하는 button, input을 클릭할때 일어난다. form 요소는 원래 서버에 데이터를 보내거나 요청하는 역할을 하기 때문에, submit event가 일어날 때마다 페이지가 새로고침된다. 이는 원하는 동작이 아니므로, 이를 방지하기 위해서 e.preventDefault()를 이용하자.
+
+```js
+someForm.addEventListener("submit", (e) => {
+  // preventDefault를 호출하면 form 태그의 고유한 동작(서버로 데이터보내고 새로고침등)을 막는다.
+  e.preventDefault();
+});
+```
+
+### reset
+
+유저가 form의 text input에 텍스트를 입력하고, submit해서 item을 추가한 후, text input을 초기화시키기 위해 e.target.value = ""을 사용했다. 비슷한 역할을 하는 메소드인 reset이 있다. reset은 form속 요소들의 값을 기본값으로 초기화한다.
+
+```js
+document.getElementById(".myform").reset();
+```
+
+## Element.matches()
+
+예시 코드의 이벤트 위임을 이용한 코드에서, 특정 태그를 걸러내기 위해 matches메소드를 이용했다. matches는 특정 element가 인자로 제공한 선택자(문자열)에 의해 선택되는지를 boolean으로 반환하는 메소드이다.
+
+```js
+// 내가 작성한 코드
+e.target.tagName !== "INPUT";
+// matches를 이용한 코드
+!e.target.matches("input");
+```
+
+matches를 이용하면, 기존의 이벤트 위임을 이용하는 코드에서, target을 걸러낼때 tagName이나 classList등을 사용했던 것을 대체할 수 있을 것 같다.
