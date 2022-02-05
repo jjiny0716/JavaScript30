@@ -610,3 +610,17 @@ e.target.tagName !== "INPUT";
 ```
 
 matches를 이용하면, 기존의 이벤트 위임을 이용하는 코드에서, target을 걸러낼때 tagName이나 classList등을 사용했던 것을 대체할 수 있을 것 같다.
+
+# Day 16 - Mouse Move Shadow
+
+## Object Destructuring Assignment
+
+객체에서 여러개의 property를 변수에 저장할때, Destructuring Assignment를 사용하면 코드를 줄일 수 있다.
+
+```js
+// 객체에 변수명과 똑같은 property가 있는지 찾아보고, 대입한다.
+// hero.offsetWidth와 hero.offsetHeight를 각각 offsetWidth와 offsetHeight에 할당함.
+const { offsetWidth, offsetHeight } = hero;
+// hero.offsetWidth와 hero.offsetHeight를 각각 width와 height에 할당함.
+const { offsetWidth: width, offsetHeight: height } = hero;
+```
