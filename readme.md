@@ -624,3 +624,22 @@ const { offsetWidth, offsetHeight } = hero;
 // hero.offsetWidth와 hero.offsetHeight를 각각 width와 height에 할당함.
 const { offsetWidth: width, offsetHeight: height } = hero;
 ```
+
+# Day 17 - Sort Without Articles
+
+## 정규식으로 특정 단어 제거하기
+
+예제 코드에서 a, an, the를 제거하기 위해 이런 코드를 사용했다.
+
+```js
+bandName.replace(/^(a |the |an )/i, "");
+```
+
+이렇게 코드를 작성하면, 시작지점에 있는 a나 the나 an을 제거한다.  
+나는 코드를 이렇게 작성했다.
+
+```js
+s.replace(/(\bThe\b|\bAn\b|\bA\b)/gi, "");
+```
+
+이렇게 쓰면 the, an, a 한 단어를 전부 제거한다.
