@@ -643,3 +643,44 @@ s.replace(/(\bThe\b|\bAn\b|\bA\b)/gi, "");
 ```
 
 이렇게 쓰면 the, an, a 한 단어를 전부 제거한다.
+
+# Day 18 - Adding Up Times with Reduce
+
+## string과 number의 연산의 결과 타입
+
+비디오의 시간 정보를 초단위로 변환하기위해 다음과 같은 코드를 작성했다.
+
+```js
+sum += min * 60 + second;
+```
+
+하지만, min과 second의 type이 string이여서, 둘의 덧셈이 아니라 가로로 이어붙인 문자열이 결과값으로 나오는 의도치 않은 결과가 발생했다. 그래서 아래와 같이 코드를 수정하니 정상 동작했다.
+
+```js
+sum += min * 60 + Number(second);
+```
+
+이렇게 코드를 작성했는데, string과 number의 연산에서 연산자에 따라 어떤 결과 type이 나오는지 궁금해졌다. 검색해보니 string + number일때만 결과type이 string이고, 나머지 -, \*, /, %는 number가 결과로 나오는 것을 확인할 수 있었다.  
+추후에 헷갈릴때 보기위해 찾은 표를 첨부한다.
+
+```
+╔═════════════╦═══════════╦════════╗
+║ INPUT       ║ VALUE     ║ TYPEOF ║
+╠═════════════╬═══════════╬════════╣
+║ n           ║ 11.5      ║ number ║
+║ s           ║ -1.5      ║ string ║
+║ s - 0       ║ -1.5      ║ number ║
+║ n + s - 0   ║ NaN       ║ error  ║
+║ n + (s - 0) ║ 10        ║ number ║
+║ s + 0       ║ -1.50     ║ string ║
+║ n + s + 0   ║ 11.5-1.50 ║ string ║
+║ n + (s + 0) ║ 11.5-1.50 ║ string ║
+║ n + s       ║ 11.5-1.5  ║ string ║
+║ s + n       ║ -1.511.5  ║ string ║
+║ +s + n      ║ 10        ║ number ║
+║ n + +s      ║ 10        ║ number ║
+║ n++s        ║           ║ error  ║
+║ n+(+s)      ║ 10        ║ number ║
+║ Number(s)+n ║ 10        ║ number ║
+╚═════════════╩═══════════╩════════╝
+```
