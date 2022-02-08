@@ -684,3 +684,40 @@ sum += min * 60 + Number(second);
 ║ Number(s)+n ║ 10        ║ number ║
 ╚═════════════╩═══════════╩════════╝
 ```
+
+# Day 19 - Webcam Fun
+
+## 웹캠 api
+
+다음과 같은 코드로 웹캠의 정보를 얻고, 사용자에게 권한 요청등을 할 수 있다.
+
+```js
+navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+```
+
+## video event
+
+video로부터 canvas에 그려진 이미지에 다양한 효과를 주기 위해 16ms마다 canvas의 데이터를 뽑아 변형한후 다시 canvas에 그려주는 함수를 작성했고, 웹캠이 인식되서 재생이 시작된 후에 위의 함수를 호출하려 했다. 정확히 웹캠에 관련된 자원을 다 얻고 재생하기 시작하는 시점에 위의 함수를 호출하려면 getUserMedia의 then에서 함수를 호출했지만, video의 width가 0이라는 오류가 발생했다. 아마 video.play()를 한다고 해서 바로 재생이 시작되는게 아닌 것 같았다. 이를 해결하기 위해서 video가 발생시키는 event를 사용할 필요가 있었다. video의 canplay event는 비디오가 재생시작 가능한 상태일때 발생하는 이벤트이다. 
+
+```js
+video.addEventListener("canplay", paintVideoToCanvas);
+```
+
+이렇게 작성하니 아까 언급한 오류는 발생하지 않았다. navigator.mediaDevices.getUserMedia가 반환한 promise에 callback function을 연결했는데.. callback function이 불려지는 시점이 비디오가 play가능한 시점이 아니었던걸까? 추후에 조금더 알아봐야겠다..
+
+## canvas로부터 image 얻기, image를 canvas에 그리기
+
+canvas에 그림을 그리고, 이미지의 형태로 그것을 얻고, 변환하기 위해 다음과 같은 canvas의 api들을 이용할 수 있다.
+
+```js
+ctx.drawImage(video, 0, 0, width, height);
+let pixels = ctx.getImageData(0, 0, width, height);
+// pixels를 변형
+ctx.putImageData(pixels, 0, 0);
+```
+
+## download link 만들기
+
+```js
+link.setAttribute('download', 'handsome');
+```
