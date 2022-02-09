@@ -689,15 +689,17 @@ sum += min * 60 + Number(second);
 
 ## 웹캠 api
 
-다음과 같은 코드로 웹캠의 정보를 얻고, 사용자에게 권한 요청등을 할 수 있다.
+다음과 같은 코드로 사용자에게 미디어 입력 장치 사용 권한을 요청하고, 수락되면 스트림 자원을 반환한다.
 
 ```js
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+navigator.mediaDevices.getUserMedia({ video: true, audio: false });
 ```
+
+위의 코드는 MediaStream객체로 이행하는 promise라고 한다. then으로 MediaStream객체를 받아서 video.srcObject에 대입해준 후 video.play()를 하면 비디오가 스트리밍된다!
 
 ## video event
 
-video로부터 canvas에 그려진 이미지에 다양한 효과를 주기 위해 16ms마다 canvas의 데이터를 뽑아 변형한후 다시 canvas에 그려주는 함수를 작성했고, 웹캠이 인식되서 재생이 시작된 후에 위의 함수를 호출하려 했다. 정확히 웹캠에 관련된 자원을 다 얻고 재생하기 시작하는 시점에 위의 함수를 호출하려면 getUserMedia의 then에서 함수를 호출했지만, video의 width가 0이라는 오류가 발생했다. 아마 video.play()를 한다고 해서 바로 재생이 시작되는게 아닌 것 같았다. 이를 해결하기 위해서 video가 발생시키는 event를 사용할 필요가 있었다. video의 canplay event는 비디오가 재생시작 가능한 상태일때 발생하는 이벤트이다. 
+video로부터 canvas에 그려진 이미지에 다양한 효과를 주기 위해 16ms마다 canvas의 데이터를 뽑아 변형한후 다시 canvas에 그려주는 함수를 작성했고, 웹캠이 인식되서 재생이 시작된 후에 위의 함수를 호출하려 했다. 정확히 웹캠에 관련된 자원을 다 얻고 재생하기 시작하는 시점에 위의 함수를 호출하려면 getUserMedia의 then에서 함수를 호출했지만, video의 width가 0이라는 오류가 발생했다. 아마 video.play()를 한다고 해서 바로 재생이 시작되는게 아닌 것 같았다. 이를 해결하기 위해서 video가 발생시키는 event를 사용할 필요가 있었다. video의 canplay event는 비디오가 재생시작 가능한 상태일때 발생하는 이벤트이다.
 
 ```js
 video.addEventListener("canplay", paintVideoToCanvas);
@@ -716,8 +718,71 @@ let pixels = ctx.getImageData(0, 0, width, height);
 ctx.putImageData(pixels, 0, 0);
 ```
 
-## download link 만들기
+## image download link 만들기
+
+a 태그에 download속성이 있다면 다운로드 링크가 만들어진다.
 
 ```js
-link.setAttribute('download', 'handsome');
+// 이렇게 생성된 링크를 클릭하면 someImage.jpg가 다운로드 된다.
+<a href="somePath/someImage.jpg" download></a>;
+// downolad속성의 값은 파일을 어떤 이름으로 저장할지 설정하는 것이다.
+link.setAttribute("download", "handsome"); // handsome.jpg
+```
+
+그렇다면, 지금 canvas에 그려져있는 그림을 어떻게 url로 변환해서 href의 값으로 줄 수 있을까?
+
+```js
+const data = canvas.toDataURL("image/jpeg");
+link.href = data;
+```
+
+# Day 20 - Speech Detection
+
+## SpeechRecognition
+
+SpeechRecognition은 Web Speach API의 인터페이스이다. [MDN 문서](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition)에 잘 설명되어 있으므로, 여기엔 이번 프로젝트에서 사용했던 기능만 정리해보겠다.
+
+### property
+
+```js
+// interimResults는 음성이 끝났는지 여부를 데이터에 같이 반환할지 여부이다.
+recognition.interimResults = true;
+// 언어를 설정하는 곳이다. 혹시해서 ko로 해봤는데 아주 잘된다.
+recognition.lang = "ko";
+```
+
+### event
+
+```js
+// 음성인식의 결과가 나올 때마다 result 이벤트가 발생한다.
+recognition.addEventListener("result", (e) => {});
+
+// recognition.start는 음성인식을 시작하는 메서드이다.
+// end 이벤트는 음성인식이 끝난 후 발생하는 이벤트이다.
+// 음성인식이 끝나면, 다시 음성인식을 시작해 웹페이지가 켜져있는 동안
+// 계속해서 음성인식을 하도록 하기위해 아래의 코드를 사용했다.
+recognition.addEventListener("end", recognition.start);
+```
+
+### 결과 받아보기
+
+```js
+// 결과를 받을 때 마다 실행하도록 이벤트리스너 등록
+recognition.addEventListener("result", (e) => {
+  // 결과!
+  console.log(e.results);
+
+  // results는 길이 1인 배열과 isFinal정보를 담고있는 result들로 이루어져있음
+  // 0번째 데이터의 transcript로 전부 변환한다음에 합친다.
+  const transcript = Array.from(e.results)
+    .map((result) => result[0].transcript)
+    .join("");
+
+  // 결과문장 출력
+  console.log(transcript);
+
+  if (e.results[0].isFinal) {
+    // 정보에 음성인식이 끝났는지가 같이 오기때문에, 끝난 후 추가적으로 뭔가 할 수 있다.
+  }
+});
 ```
