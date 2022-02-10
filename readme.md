@@ -786,3 +786,42 @@ recognition.addEventListener("result", (e) => {
   }
 });
 ```
+
+# Day 21 - Geolocation
+
+## navigator
+
+저번 웹캠편에 이어서 navigator라는 키워드가 또 등장했다. Navigator 인터페이스는 사용자 에이전트의 상태와 신원 정보를 나타내며, 스크립트로 해당 정보를 질의할 때와 애플리케이션을 특정 활동에 등록할 때 사용된다고 한다. 저번 웹캠편에서 처럼 미디어 접근을 요청하고, 관련 자원을 가져오거나, 이번 프로젝트처럼 장치의 위치 정보에 접근할 수 있는 객체를 받아올 수 있고, 이 외에도 장치의 네트워크 연결 정보를 가져오거나, 사용자의 선호 언어를 가져오는등 다양하고 유용한 정보를 받아올 수 있다. [MDN문서](https://developer.mozilla.org/ko/docs/Web/API/Navigator)에서 더 자세하게 알아볼 수 있겠다.
+
+## geolocation
+
+다음으로 navigator로 받을 수 있는 Geolocation 객체에 대해 알아보자.
+
+### Geolocation 객체 받아오기
+
+```js
+// Navigator는 기본적으로 존재하는 전역 객체로서, 따로 생성할 필요가 없다.
+// 아래 코드로 geolocation객체를 읽기 전용으로 받아올 수 있다.
+navigator.geolocation;
+```
+
+### Geolocation 객체로 다양한 정보 얻어내기
+
+geolocation 객체가 제공하는 메서드를 사용하면, GeolocationPosition 객체를 받을 수 있다.
+
+```js
+Geolocation.getCurrentPosition(); // 장치의 현재 위치를 조사한 후 GeolocationPosition 반환
+Geolocation.watchPosition(); // 장치의 위치가 바뀔때마다 호출하는 콜백을 등록.
+// 콜백함수의 인자로 GeolocationPosition을 받을 수 있다.
+```
+
+GeolocationPosition 객체 안에 있는 coords라는 또다른 객체에 다양한 정보가 저장되어있다. 장치의 위도, 경도, 방향, 속력등의 정보를 얻을 수 있다.
+
+```js
+navigator.geolocation.watchPosition((data) => {
+  const latitude = data.coords.latitude;
+  const longitude = data.coords.longitude;
+  const speed = data.coords.speed;
+  const heading = data.coords.heading;
+});
+```
