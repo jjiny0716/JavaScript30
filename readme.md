@@ -313,7 +313,7 @@ window.outerHeight(); // 브라우저 전체의 높이 (전체 다 포함)
 
 ## 마우스 좌표를 얻는 다양한 방법
 
-마우스를 이용해서 그림을 그리기 위해 clientX와 clientY를 이용해 마우스 좌표를 얻어냈다. 그런데 나중에 정답을 보니, offsetX와 offsetY를 이용해 마우스 좌표를 얻어오고 있었다. 무슨 차이인가 궁금해서 검색해봤더니, 마우스 좌표를 얻는 방법이 4가지나 있었다. 간단히 정리해봤다.
+마우스를 이용해서 그림을 그리기 위해 clientX와 clientY를 이용해 마우스 좌표를 얻어냈다. 그런데 나중에 예제코드를 보니, offsetX와 offsetY를 이용해 마우스 좌표를 얻어오고 있었다. 무슨 차이인가 궁금해서 검색해봤더니, 마우스 좌표를 얻는 방법이 4가지나 있었다. 간단히 정리해봤다.
 
 ### 1. clientX, clientY
 
@@ -825,3 +825,13 @@ navigator.geolocation.watchPosition((data) => {
   const heading = data.coords.heading;
 });
 ```
+
+# Day 22 - Follow Along Link Highlighter
+
+## mouseover vs mouseenter
+
+마우스가 링크에 올라갔을때 발생하는 이벤트가 필요했기 때문에, 검색해보니 두가지가 있었다. 차이점을 찾아보니, mouseover는 버블링이 일어나고, mouseenter는 그렇지 않다는 것이었다. 이벤트 위임을 이용한 코드를 작성할땐 mouseover를 이용하고, 아니면 mouseenter를 이용하면 될 것 같다.
+
+## getBoundingClientRect가 제공하는 좌표
+
+getBoundingClientRect의 x와 y는 브라우저 화면 기준이다. highlight의 위치 이동을 위해 transform: translate()를 사용했고, getBoundingClientRect로 얻은 x와 y를 사용했다. 그런데 스크롤을 내리고 작동시키니 두 좌표가 일치하지 않는다는 것을 알아냈다. highlight는 position: absolute, top: 0, left: 0으로 설정되어 있었기 때문에, 문서 기준으로 움직이고, getBoundingClientRect는 브라우저 화면 기준이기 때문에, 서로 맞지 않았던 것이다. scrollY를 더해주니 해결됬다. 
