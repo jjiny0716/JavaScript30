@@ -834,4 +834,33 @@ navigator.geolocation.watchPosition((data) => {
 
 ## getBoundingClientRect가 제공하는 좌표
 
-getBoundingClientRect의 x와 y는 브라우저 화면 기준이다. highlight의 위치 이동을 위해 transform: translate()를 사용했고, getBoundingClientRect로 얻은 x와 y를 사용했다. 그런데 스크롤을 내리고 작동시키니 두 좌표가 일치하지 않는다는 것을 알아냈다. highlight는 position: absolute, top: 0, left: 0으로 설정되어 있었기 때문에, 문서 기준으로 움직이고, getBoundingClientRect는 브라우저 화면 기준이기 때문에, 서로 맞지 않았던 것이다. scrollY를 더해주니 해결됬다. 
+getBoundingClientRect의 x와 y는 브라우저 화면 기준이다. highlight의 위치 이동을 위해 transform: translate()를 사용했고, getBoundingClientRect로 얻은 x와 y를 사용했다. 그런데 스크롤을 내리고 작동시키니 두 좌표가 일치하지 않는다는 것을 알아냈다. highlight는 position: absolute, top: 0, left: 0으로 설정되어 있었기 때문에, 문서 기준으로 움직이고, getBoundingClientRect는 브라우저 화면 기준이기 때문에, 서로 맞지 않았던 것이다. scrollY를 더해주니 해결됬다.
+
+# Day 23 - Speech Synthesis
+
+## speechSynthesis
+
+speechSynthesis는 Web Speech API의 인터페이스이다. 음성인식 프로젝트에선 SpeechRecognition을 사용했고, 이번엔 SpeechSynthesis를 이용하여 SpeechSynthesisUtterance를 재생한다.
+
+```js
+// 재생
+speechSynthesis.speak(utterance);
+// 종료
+speechSynthesis.cancel();
+```
+
+## SpeechSynthesisUtterance
+
+SpeechSynthesisUtterance는 읽을 텍스트와, 어떻게 읽을지(언어, 피치, 속도등)를 나타내는 객체이다.
+
+```js
+const utterance = new SpeechSynthesisUtterance();
+// 읽을 텍스트 설정
+utterance.text = "I love JavaScript 👍";
+// 속도 설정
+utterance.rate = 1.5;
+// 피치 설정
+utterance.pitch = 1.5;
+// 재생
+speechSynthesis.speak(utterance);
+```
