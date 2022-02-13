@@ -864,3 +864,8 @@ utterance.pitch = 1.5;
 // 재생
 speechSynthesis.speak(utterance);
 ```
+
+# Day 24 - Sticky Nav
+
+## static, relative에서 absolute, fixed로 변경할 때 주의할 점
+absolute와 fixed는 문서에서 자신의 공간을 차지하지 않는다. 그래서 어떤 요소를 relative에서 fixed로 변경할 때, 그 요소가 차지하던 공간이 비게되고, 나머지 요소들이 그 공간을 차지하기 위해 움직인다. 이 프로젝트에서 nav를 relative에서 fixed로 변경했을때, 아래 문서가 위로 올라오는 현상이 위의 특징때문에 발생하는 것이다. 이를 해결하려면 padding이나, margin으로 공간을 메꿔줘야 하겠다.
