@@ -868,4 +868,44 @@ speechSynthesis.speak(utterance);
 # Day 24 - Sticky Nav
 
 ## static, relative에서 absolute, fixed로 변경할 때 주의할 점
+
 absolute와 fixed는 문서에서 자신의 공간을 차지하지 않는다. 그래서 어떤 요소를 relative에서 fixed로 변경할 때, 그 요소가 차지하던 공간이 비게되고, 나머지 요소들이 그 공간을 차지하기 위해 움직인다. 이 프로젝트에서 nav를 relative에서 fixed로 변경했을때, 아래 문서가 위로 올라오는 현상이 위의 특징때문에 발생하는 것이다. 이를 해결하려면 padding이나, margin으로 공간을 메꿔줘야 하겠다.
+
+# Day 25 - Event Capture, Propagation, Bubbling and Once
+
+## Bubbling
+
+이벤트 버블링은 특정 요소에서 이벤트가 발생했을때 해당 이벤트가 부모 요소로 쭉 전달되는 특성을 이야기한디. 중첩된 div에서 제일 안쪽의 div를 클릭하면, 상위의 div와 body에서도 클릭 이벤트가 발생하게 된다. 이벤트 위임은 이러한 특성을 이용한 것이다.
+
+## Capture
+
+이벤트 캡쳐는 버블링과 반대로 최상위 부모에서 이벤트가 발생한 요소까지 내려가면서 이벤트가 전파되는 방식이다. 이벤트 캡쳐를 이용하려면, addEventListener에 특정 property를 갖는 추가적인 object를 전달하면 된다.
+
+```js
+div.addEventListener("click", logEvent, {
+  capture: true, // 기본 값은 false고, false일땐 bubbling이 발생한다.
+});
+```
+
+## stopPropagation
+
+eventListener로 부착된 콜백함수에서 e.stopPropagation()을 호출하면, 더이상의 버블링이나 캡쳐를 막을 수 있다.
+
+```js
+function someCallback(e) {
+  e.stopPropagation();
+}
+```
+
+## once
+
+eventListener가 한번만 발생하게 하는 방법이 있다.
+
+```js
+div.addEventListener("click", logEvent, {
+  once: true, // div가 클릭되었을때 logEvent가 호출되고, 이후엔 아무리 클릭해도 발생하지 않는다.
+});
+```
+
+공부하다 잘 정리된 블로그 글을 찾았다. 이벤트부분이 헷갈리면 보면 되겠다.  
+https://joshua1988.github.io/web-development/javascript/event-propagation-delegation/
