@@ -909,3 +909,13 @@ div.addEventListener("click", logEvent, {
 
 공부하다 잘 정리된 블로그 글을 찾았다. 이벤트부분이 헷갈리면 보면 되겠다.  
 https://joshua1988.github.io/web-development/javascript/event-propagation-delegation/
+
+# Day 26 - Stripe Follow Along Nav
+
+## document.querySelector
+
+습관적으로 querySelector를 document.querySelector의 모습으로만 이용하고 있었는데, document뿐만 아니라 다른 element에서도 querySelector를 사용할 수 있다. 탐색 범위를 좁히고 싶을때 선택자를 바꿔볼 수도 있지만, 특정 element에서 querySelector를 고려해보면 좋을 것 같다.
+
+## 클래스 추가에 딜레이 주기
+
+background에 transition을 이용했는데, background가 완전히 이동하기 전에, 내용물이 나타나서 부자연스러운 애니메이션이 되었다. transition-delay를 이용할 수도 있고, setTimeout을 이용해 클래스를 늦게 추가해도 괜찮을 것 같다.
