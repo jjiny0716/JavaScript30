@@ -919,3 +919,21 @@ https://joshua1988.github.io/web-development/javascript/event-propagation-delega
 ## 클래스 추가에 딜레이 주기
 
 background에 transition을 이용했는데, background가 완전히 이동하기 전에, 내용물이 나타나서 부자연스러운 애니메이션이 되었다. transition-delay를 이용할 수도 있고, setTimeout을 이용해 클래스를 늦게 추가해도 괜찮을 것 같다.
+
+# Day 27 - Click and Drag
+
+## element의 스크롤 위치 가져오기
+
+element에 스크롤이 있는 경우, 어느정도 스크롤이 되었는지 값을 얻어올 수 있다.
+
+```js
+element.scrollLeft; // left를 기준으로, 오른쪽으로 얼마나 스크롤 되었는지 px단위로 제공
+element.scrollTop; // Top을 기준으로, 아래로 얼마나 스크롤 되었는지 px단위로 제공
+```
+
+위의 속성들은 읽을수만 있는게 아니라, 쓰기도 가능하다. 자바스크립트로 element의 스크롤 정도를 변경할 수 있으니 유용하게 쓰면 되겠다.
+
+## 스크롤바를 이용하지 않는 드래그 효과 구현하기
+
+마우스를 누른 상태로 움직일때마다, 이전 마우스의 x좌표와 현재 마우스의 현재 좌표의 차이만큼을 scrollLeft에 더해주고, 이전 마우스의 x좌표를 업데이트 하는 식으로 진행했다.  
+예제코드에서는 마우스를 누를때, scrollLeft와 마우스의 x좌표를 저장하고, element의 scrollLeft를 처음에 저장했던 마우스의 x좌표와 현재 x좌표의 차이와, scrollLeft의 합으로 구현했다.
