@@ -937,3 +937,21 @@ element.scrollTop; // Top을 기준으로, 아래로 얼마나 스크롤 되었�
 
 마우스를 누른 상태로 움직일때마다, 이전 마우스의 x좌표와 현재 마우스의 현재 좌표의 차이만큼을 scrollLeft에 더해주고, 이전 마우스의 x좌표를 업데이트 하는 식으로 진행했다.  
 예제코드에서는 마우스를 누를때, scrollLeft와 마우스의 x좌표를 저장하고, element의 scrollLeft를 처음에 저장했던 마우스의 x좌표와 현재 x좌표의 차이와, scrollLeft의 합으로 구현했다.
+
+# Day 28 - Video Speed Controller
+
+## 상수는 const 변수로 사용하기
+
+계산된 percentage로부터 재생속도를 얻기 위해 다음과같은 코드를 작성했다.
+
+```js
+const speedValue = (0.4 + (percentage * 3.6) / 100).toFixed(2);
+```
+
+speedValue가 최소 0.4, 최대 4.0이 되도록 코드를 작성했는데, 직관적이지가 않고 나중에 수정하기가 힘들 수 있다. 앞으로 이러한 상수값들은 const 변수로 빼주려고 노력해야겠다.
+
+```js
+const min = 0.4;
+const max = 4.0;
+const speedValue = (min + (percentage * (max - min)) / 100).toFixed(2);
+```
