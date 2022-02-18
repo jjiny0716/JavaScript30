@@ -955,3 +955,48 @@ const min = 0.4;
 const max = 4.0;
 const speedValue = (min + (percentage * (max - min)) / 100).toFixed(2);
 ```
+
+# Day 29 - Countdown Timer
+
+## form 요소 접근
+
+기존에 querySelector를 이용해서 form 요소에 접근했었는데, form요소에 접근할 수 있는 다른 방법이 있었다. 알아두면 좋을 것 같다.
+
+### name 이용허기
+
+form과 form 요소에 name 속성이 있다면, name을 이용해서 form 요소에 접근할 수 있다.
+
+```js
+// some-form이라는 클래스를 가진 form속 minures라는 name을 가진 요소의 값에 접근하는 코드
+document.querySelector(".some-form").minutes.value;
+```
+
+### elements
+
+elements를 사용하면, form안의 모든 요소들을 배열형태로 받아올 수 있다.
+
+```js
+document.querySelector(".some-form").elements;
+```
+
+## document.title
+
+document의 title을 바꿀 수 있다(브라우저 상단 탭에 표시되는 내용).
+
+```js
+document.title = "Awesome page";
+```
+
+## Date에 시간 연산
+
+Date.now()를 이용, ms단위의 timestamp를 받아온다음, 연산후 다시 Date를 생성하거나, getters와 setters를 이용하는 방법이 있다.
+
+```js
+// 1.
+const now = Date.now();
+const then = new Date(now + seconds * 1000);
+
+// 2.
+const now = new Date();
+now.setSeconds(now.getSeconds() + seconds);
+```
