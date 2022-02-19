@@ -1000,3 +1000,28 @@ const then = new Date(now + seconds * 1000);
 const now = new Date();
 now.setSeconds(now.getSeconds() + seconds);
 ```
+
+# Day 30 - Whack A Mole
+
+## Math.random
+
+Math.random을 정확히 사용하지 않아 max값이 나오지 않는 버그가 발생했다(의도한 것은 max를 포함하는 것). Math.round를 사용하면 해결될까 했는데, max를 포함한 값이 나오긴 하나, min과 max의 발생 빈도수가 다른 수의 절반이 되었다. 생각해보면 당연한게, 반올림때문에, 다른 수는 1의 범위를 가지나, min과 max는 0.5의 범위를 가지기 때문이다. Math.random을 이용해 특정 범위의 수를 생성하려면 다음과 같은 코드를 작성하자.
+
+```js
+// min <= result <= max를 생성.
+const min = 1;
+const max = 100;
+// max 포함
+result = Math.random(min + Math.random() * (max - min + 1));
+// max 미포함
+result = Math.random(min + Math.random() * (max - min));
+```
+
+또, Math.random에서 1이 발생하면 의도하지 않은 값이 나오지 않나 생각했는데, 1은 나오지 않는다.
+
+## Event.istrusted
+
+예제코드에서 e.istrusted라는 코드를 발견했다. isTrusted는 Event의 읽기 전용 속성이고, 이벤트가 사용자 액션에 의해 발생되었을때는 true, 스크립트에서 생성 또는 수정했거나, EventTarget.dispatchEvent()로 발송한 이벤트의 경우 false인 불리언 값이라고 한다.
+출처: [MDN문서](https://developer.mozilla.org/ko/docs/Web/API/Event/isTrusted)
+
+# 끝!
